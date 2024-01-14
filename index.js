@@ -13,47 +13,57 @@ const render = require("./src/page-template.js");
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
 
-
-
 const generateTeamMember = (teamMember) => {
     inquirer
     .prompt([{
         type: 'input',
         message: `Enter the ${teamMember}'s name: `,
-        name: 'memberName'
+        name: 'name'
     },
     {
         type: 'input',
         message: `Enter the ${teamMember}'s Employee ID: `,
-        name: 'memberID'
+        name: 'id'
     },
     {
         type: 'input',
         message: `Enter the ${teamMember}'s email address: `,
-        name: 'memberEmail'
+        name: 'email'
     },
     {
         type: 'input',
         message: `Enter the ${teamMember}'s Office number : `,
-        name: 'tmOfficeNumber',
+        name: 'officeNumber',
         when: teamMember == "Manager"
     },
     {
         type: 'input',
         message: `Enter the ${teamMember}'s GitHub username: `,
-        name: 'tmGitHub',
+        name: 'gitHub',
         when: teamMember == "Engineer"
     },
     {
         type: 'input',
         message: `Enter the ${teamMember}'s School: `,
-        name: 'tmSchool',
+        name: 'school',
         when: teamMember == "Intern"
     },
     ])
     .then((answers) => {
-        console.log(answers);
+        switch(teamMember) {
+            case 'Manager':
+              return new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+              break;
+            case 'Engineer':
+              return new Engineer(answers.name, answers.id, answers.email, answers.gitHub);
+              break;
+            case 'Intern':
+              return new Intern(answers.name, answers.id, answers.email, answers.school);
+              break;
+          }
       })
 }
+
+
 
 generateTeamMember("Manager");
