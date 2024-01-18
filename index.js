@@ -10,11 +10,9 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./src/page-template.js");
 
-
-// TODO: Write Code to gather information about the development team members, and render the HTML file.
-
-const generateTeamMember = (teamMember) => {
-    inquirer
+//helper function to ask user questions to generate a particular team member. Takes one argument 'teamMember', a string of 'Manager', 'Engineer' or 'Intern'.
+async function generateTeamMember(teamMember) {
+    const answers = await inquirer
     .prompt([{
         type: 'input',
         message: `Enter the ${teamMember}'s name: `,
@@ -49,21 +47,57 @@ const generateTeamMember = (teamMember) => {
         when: teamMember == "Intern"
     },
     ])
-    .then((answers) => {
-        switch(teamMember) {
-            case 'Manager':
-              return new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
-              break;
-            case 'Engineer':
-              return new Engineer(answers.name, answers.id, answers.email, answers.gitHub);
-              break;
-            case 'Intern':
-              return new Intern(answers.name, answers.id, answers.email, answers.school);
-              break;
-          }
-      })
+
+    switch(teamMember) {
+        case 'Manager':
+            return new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+            break;
+        case 'Engineer':
+            return new Engineer(answers.name, answers.id, answers.email, answers.gitHub);
+            break;
+        case 'Intern':
+            return new Intern(answers.name, answers.id, answers.email, answers.school);
+            break;
+    }
 }
 
+// function to initialize program and loop options
+async function init() {
 
+    let continueQ = true;
+    let teamMembers = [];
 
-generateTeamMember("Manager");
+    console.log("Welcome to the team generator! Please enter the team manager's details.")
+    teamMembers.push(await generateTeamMember("Manager"));
+    while (continueQ) {
+        let answer = await inquirer.prompt([
+        {
+            type: 'list',
+            message: `What would you like to do? `,
+            choices: ['Add an engineer', 'Add an intern', 'Finish building the team'],
+            name: 'choice',
+        }]);
+
+        switch(answer.choice) {
+            case 'Add an engineer':
+                teamMembers.push(await generateTeamMember("Engineer"));
+                break;
+            case 'Add an intern':
+                teamMembers.push(await generateTeamMember("Intern"));
+                break;
+            case 'Finish building the team':
+                continueQ = false;
+                break;
+        }
+
+        const data = render(teamMembers);
+        fs.writeFile(outputPath, data, (err) => { //render HTML and write to output file
+            if (err)
+              console.log(err);
+            else {
+              console.log("File written successfully");
+            }}); 
+    }
+}
+
+init();
