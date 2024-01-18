@@ -4,7 +4,7 @@ const generateTeam = team => {
     // creates the manager html
     const generateManager = manager => {
         return `
-        <div class="card employee-card">
+        <div class="card employee-card m-3 shadow">
         <div class="card-header bg-primary text-white">
             <h2 class="card-title">${manager.getName()}</h2>
             <h3 class="card-title"><i class="fas fa-mug-hot mr-2"></i>${manager.getRole()}</h3>
@@ -23,7 +23,7 @@ const generateTeam = team => {
     // creates the html for engineers
     const generateEngineer = engineer => {
         return `
-        <div class="card employee-card">
+        <div class="card employee-card m-3 shadow">
     <div class="card-header bg-primary text-white">
         <h2 class="card-title">${engineer.getName()}</h2>
         <h3 class="card-title"><i class="fas fa-glasses mr-2"></i>${engineer.getRole()}</h3>
@@ -42,7 +42,7 @@ const generateTeam = team => {
     // creates the html for interns
     const generateIntern = intern => {
         return `
-        <div class="card employee-card">
+        <div class="card employee-card m-3 shadow">
     <div class="card-header bg-primary text-white">
         <h2 class="card-title">${intern.getName()}</h2>
         <h3 class="card-title"><i class="fas fa-user-graduate mr-2"></i>${intern.getRole()}</h3>
@@ -99,17 +99,15 @@ module.exports = team => {
 
 <body>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row ">
             <div class="col-12 jumbotron mb-3 bg-danger text-white team-heading">
                 <h1 class="text-center">My Team</h1>
             </div>
         </div>
     </div>
     <div class="container">
-        <div class="row">
-            <div class="team-area col-12 d-flex justify-content-center">
-                ${generateTeam(team)}
-            </div>
+        <div class="row col-12 d-flex justify-content-center">
+                ${generateTeam(team)}     
         </div>
     </div>
 </body>
